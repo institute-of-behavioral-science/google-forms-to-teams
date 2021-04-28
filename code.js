@@ -8,17 +8,7 @@
 /////////////////////////
 
 // Alter this to match the incoming webhook url provided by Slack
-var slackIncomingWebhookUrl = 'https://hooks.slack.com/services/YOUR-URL-HERE';
-
-// Include # for public channels, omit it for private channels
-var postChannel = "YOUR-CHANNEL-HERE";
-
-var postIcon = ":mailbox_with_mail:";
-var postUser = "Form Response";
-var postColor = "#0000DD";
-
-var messageFallback = "The attachment must be viewed as plain text.";
-var messagePretext = "A user submitted a response to the form.";
+var teamsIncomingWebhookUrl = 'https://hooks.slack.com/services/YOUR-URL-HERE';
 
 ///////////////////////
 // End customization //
@@ -30,28 +20,26 @@ function initialize() {
   for (var i in triggers) {
     ScriptApp.deleteTrigger(triggers[i]);
   }
-  ScriptApp.newTrigger("submitValuesToSlack")
+  ScriptApp.newTrigger("submitValuesToTeams")
     .forSpreadsheet(SpreadsheetApp.getActiveSpreadsheet())
     .onFormSubmit()
     .create();
 }
 
 // Running the code in initialize() will cause this function to be triggered this on every Form Submit
-function submitValuesToSlack(e) {
+function submitValuesToTeams(e) {
   // Test code. uncomment to debug in Google Script editor
   // if (typeof e === "undefined") {
   //   e = {namedValues: {"Question1": ["answer1"], "Question2" : ["answer2"]}};
   //   messagePretext = "Debugging our Sheets to Slack integration";
   // }
 
-  var attachments = constructAttachments(e.values);
-
+  var fieldsList = makeFields(values);
+  var fields = fieldsList.join('\n');
+  
   var payload = {
-    "channel": postChannel,
-    "username": postUser,
-    "icon_emoji": postIcon,
-    "link_names": 1,
-    "attachments": attachments
+    "title":"A new employee needs to be onboarded",
+    "text": fields
   };
 
   var options = {
@@ -59,24 +47,7 @@ function submitValuesToSlack(e) {
     'payload': JSON.stringify(payload)
   };
 
-  var response = UrlFetchApp.fetch(slackIncomingWebhookUrl, options);
-}
-
-// Creates Slack message attachments which contain the data from the Google Form
-// submission, which is passed in as a parameter
-// https://api.slack.com/docs/message-attachments
-var constructAttachments = function(values) {
-  var fields = makeFields(values);
-
-  var attachments = [{
-    "fallback" : messageFallback,
-    "pretext" : messagePretext,
-    "mrkdwn_in" : ["pretext"],
-    "color" : postColor,
-    "fields" : fields
-  }]
-
-  return attachments;
+  var response = UrlFetchApp.fetch(teamsIncomingWebhookUrl, options);
 }
 
 // Creates an array of Slack fields containing the questions and answers
