@@ -1,7 +1,7 @@
-// This Google Sheets script will post to a slack channel when a user submits data to a Google Forms Spreadsheet
-// View the README for installation instructions. Don't forget to add the required slack information below.
+// This Google Sheets script will post to a Teams channel when a user submits data to a Google Forms Spreadsheet
+// View the README for installation instructions. Don't forget to add the required Teams information below.
 
-// Source: https://github.com/markfguerra/google-forms-to-slack
+// Originally based on: https://github.com/markfguerra/google-forms-to-slack
 
 /////////////////////////
 // Begin customization //
@@ -9,10 +9,13 @@
 
 // Alter this to match the incoming webhook url provided by Slack
 var teamsIncomingWebhookUrl = 'https://o365coloradoedu.webhook.office.com/webhookb2/card-here';
+var cardTitle = "Teams Card Title"
 
 ///////////////////////
 // End customization //
 ///////////////////////
+// This Google Sheets script will post to a Teams channel when a user submits data to a Google Forms Spreadsheet
+// View the README for installation instructions. Don't forget to add the required slack information below.
 
 // In the Script Editor, run initialize() at least once to make your code execute on form submit
 function initialize() {
@@ -28,17 +31,12 @@ function initialize() {
 
 // Running the code in initialize() will cause this function to be triggered this on every Form Submit
 function submitValuesToTeams(e) {
-  // Test code. uncomment to debug in Google Script editor
-  // if (typeof e === "undefined") {
-  //    e = {namedValues: {"Question1": ["answer1"], "Question2" : ["answer2"]}};
-  //    messagePretext = "Debugging our Sheets to Slack integration";
-  // };
-
   var fields = makeFields(e.values);
-  var toSend = fields.join('\n');
+  var toSend = fields.join('\n-  ');
+  var toSend = '-  '.concat('', toSend);
   
   var payload = {
-    "title":"Add the following employee to Citrix",
+    "title": cardTitle,
     "text": toSend
   };
 
@@ -50,7 +48,7 @@ function submitValuesToTeams(e) {
   var response = UrlFetchApp.fetch(teamsIncomingWebhookUrl, options);
 }
 
-// Creates an array of Slack fields containing the questions and answers
+// Creates an array of Teams fields containing the questions and answers
 var makeFields = function(values) {
   var fields = [];
 
@@ -59,8 +57,13 @@ var makeFields = function(values) {
   for (var i = 0; i < columnNames.length; i++) {
     var colName = columnNames[i];
     var val = values[i];
-    var thing = colName.concat(' ', val)
-    fields.push(thing);
+    if (typeof val !== "undefined") {
+      var finalString = "**";
+      finalString += colName;
+      finalString += ":** ";
+      finalString += val;
+      fields.push(finalString);
+    }
   }
 
   return fields;
