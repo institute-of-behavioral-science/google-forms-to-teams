@@ -20,6 +20,6 @@ Procedure
  - In the menu, click on "Tools" -> "Script Editor".
  - Paste the code.js script into the Script Editor.
  - Edit the code you pasted to include the Teams webhook URL from Setup above in the customizations block; change the variable `teamsIncomingWebhookUrl`
- - Change the title of the cards in the var cardTitle line.
+ - Change the title of the cards in the `var cardTitle = ` line.
  - Set up the event triggers by running the `initialize()` function. In the Script Editor's menu bar, select the function `initialize` and click Run. Agree to any permission requests.
  - You're done! Try it out by submitting a response to your Google Form. If successful, you'll see a new message in your Teams channel.
