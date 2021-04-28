@@ -8,7 +8,7 @@
 /////////////////////////
 
 // Alter this to match the incoming webhook url provided by Slack
-var teamsIncomingWebhookUrl = 'https://hooks.slack.com/services/YOUR-URL-HERE';
+var teamsIncomingWebhookUrl = 'https://o365coloradoedu.webhook.office.com/webhookb2/card-here';
 
 ///////////////////////
 // End customization //
@@ -30,16 +30,16 @@ function initialize() {
 function submitValuesToTeams(e) {
   // Test code. uncomment to debug in Google Script editor
   // if (typeof e === "undefined") {
-  //   e = {namedValues: {"Question1": ["answer1"], "Question2" : ["answer2"]}};
-  //   messagePretext = "Debugging our Sheets to Slack integration";
-  // }
+  //    e = {namedValues: {"Question1": ["answer1"], "Question2" : ["answer2"]}};
+  //    messagePretext = "Debugging our Sheets to Slack integration";
+  // };
 
-  var fieldsList = makeFields(values);
-  var fields = fieldsList.join('\n');
+  var fields = makeFields(e.values);
+  var toSend = fields.join('\n');
   
   var payload = {
-    "title":"A new employee needs to be onboarded",
-    "text": fields
+    "title":"Add the following employee to Citrix",
+    "text": toSend
   };
 
   var options = {
@@ -59,21 +59,11 @@ var makeFields = function(values) {
   for (var i = 0; i < columnNames.length; i++) {
     var colName = columnNames[i];
     var val = values[i];
-    fields.push(makeField(colName, val));
+    var thing = colName.concat(' ', val)
+    fields.push(thing);
   }
 
   return fields;
-}
-
-// Creates a Slack field for your message
-// https://api.slack.com/docs/message-attachments#fields
-var makeField = function(question, answer) {
-  var field = {
-    "title" : question,
-    "value" : answer,
-    "short" : false
-  };
-  return field;
 }
 
 // Extracts the column names from the first row of the spreadsheet
