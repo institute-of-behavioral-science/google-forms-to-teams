@@ -15,6 +15,7 @@ You'll need a few things
 - Note the URL that the above gives you
 
 Procedure
+ - Make sure you're logged in as the owner of the Google Forms Spreadsheet. If you're logged into any other Google accounts, this won't work, so I suggest using an incognito or private browsing window.
  - Open your Google Forms Spreadsheet.
  - In the menu, click on "Tools" -> "Script Editor".
  - Paste the code.js script into the Script Editor.
