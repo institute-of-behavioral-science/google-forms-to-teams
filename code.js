@@ -8,7 +8,7 @@
 /////////////////////////
 
 // Alter this to match the incoming webhook url provided by Slack
-var teamsIncomingWebhookUrl = 'https://o365coloradoedu.webhook.office.com/webhookb2/card-here';
+var teamsIncomingWebhookUrl = 'https://webhook-url.url';
 var cardTitle = "Teams Card Title"
 
 ///////////////////////
