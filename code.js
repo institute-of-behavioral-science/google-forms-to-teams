@@ -34,6 +34,7 @@ function submitValuesToTeams(e) {
   var fields = makeFields(e.values);
   var toSend = fields.join('\n-  ');
   var toSend = '-  '.concat('', toSend);
+  toSend += "\n-  [Link to the Google Sheet](https://docs.google.com/spreadsheets/)";
   
   var payload = {
     "title": cardTitle,
